@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>808notes</title>
+    </head>
+    <body>
+        <label for="note-title">Title</label>
+        <input type="text" name="note-title" id="note-title" placeholder="Type title here...">
+        <br>
+        <label for="note-body">Note</label>
+        <textarea name="note-body" id="note-body" cols="30" rows="10" placeholder="Type your note here, then click Save..."></textarea>
+        <br>
+        <label for="note-selecter">Your Notes</label>
+        <select name="note-selecter" id="note-selecter">
+            <option value="note1" id="dropdown_note1">Note1</option>
+            <option value="note2" id="dropdown_note2">Note2</option>
+            <option value="note3" id="dropdown_note3">Note3</option>
+            <option value="placeholders"></option>
+        </select>
+        <br>
+        <button type="submit" onclick="handleSaveNoDownload();" class="pure-material-button-contained submit" id="submit-btn">Save</button>
+        <button type="submit" onclick="handleSave()" id="submit&dl-btn" class="pure-material-button-contained download">Save and Download as .json</button>
+        <br>
+        <button type="button" onclick="handleUpload()" id="loadfromjson" class="pure-material-button-contained loadfronjson">Load from uploaded .json</button>
+        <br>
+        <input type="file" name="load-notes_input" id="load-notes_input" accept="text/plain, application/json" class="pure-material-button-contained upload">
+        <label for="load-notes_input">If you have saved your notes as a .json file, you can upload it here to load them</label>
+        <script>
+            var jquery = document.createElement('script')
+            jquery.src = 'https://code.jquery.com/jquery-3.4.1.min.js'
+            jquery.type = 'text/javascript'
+            document.getElementsByTagName('head')[0].appendChild(jquery)
+            var notes_array = new Array();
+            var notes_array_string = JSON.stringify(notes_array);
+            notes_array_string = [notes_array_string];
+            const notes = new Object();
+            var notes_array_blob = new Blob(notes_array_string, { type: "text/plain;charset=utf-8" });
+
+            function server_GET(noteSubUrl, getAllNotes) {
+                const http = new XMLHttpRequest
+                const url = 'http://localhost:8080'
+                const allNotesUrl = 'http://localhost:8080/allnotes'
+                var noteUrl = url + "/note/" + arguments[0]
+                if(getAllNotes == false) {
+                    http.open('GET', noteUrl)
+                }
+                else {
+                    http.open('GET', allNotesUrl)
+                }
+                http.send()
+
+                http.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log(http.responseText)
+                    }
+                }
+            }
+            function server_POST() {
+                const http = new XMLHttpRequest
+                const url = 'http://localhost:8080'
+                const allNotesUrl = 'http://localhost:8080/allnotes'
+                var noteUrl = url + "/note/" + arguments[0]
+                if (getAllNotes == false) {
+                    http.open('GET', noteUrl)
+                }
+                else {
+                    http.open('GET', allNotesUrl)
+                }
+                http.send()
+
+                http.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log(http.responseText)
+                    }
+                }
+            }
+            function handleSave() {
+                notes.title = document.getElementById('note-title').value;
+                notes.message = document.getElementById('note-body').value;
+                notes_array.push(notes)
+                console.log(notes_array_blob);
+
+                function download(content, fileName, contentType) {
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(new Blob([JSON.stringify(notes_array, null, 2)], {type: "text/plain"}));
+                a.setAttribute("download", "notes.json");
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                }
+                download(notes_array, 'notes.json', 'text/plain');
+            }
+            function handleSaveNoDownload() {
+                notes.title = document.getElementById('note-title').value;
+                notes.message = document.getElementById('note-body').value;
+                notes_array.push(notes)
+                console.log(notes_array);
+
+                    /*function download(content, fileName, contentType) {
+                        var a = document.createElement("a");
+                        var file = new Blob([content], { type: contentType });
+                        a.href = URL.createObjectURL(file);
+                        a.download = fileName;
+                        a.click();
+                    }
+                    download(notes, 'notes.json', 'text/plain');*/
+                }
+            function handleUpload() {
+                /*var notes_loadedfromJSON = $.getJSON(document.getElementById('load-notes_input').value)
+                //document.getElementById('dropdown_note1').innerHTML.replace('Note1', notes_loadedfromJSON.)
+                console.log(notes_loadedfromJSON)*/
+                //server_GET('/note/sosig', false)
+            }
+        </script>
+    </body>
+</html>
