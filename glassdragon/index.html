@@ -30,7 +30,7 @@
         <input type="file" name="load-notes_input" id="load-notes_input" accept="text/plain, application/json" class="pure-material-button-contained upload">
         <label for="load-notes_input">If you have saved your notes as a .json file, you can upload it here to load them</label>
         <script>
-            var jquery = document.createElement('script')
+            const jquery = document.createElement('script')
             jquery.src = 'https://code.jquery.com/jquery-3.4.1.min.js'
             jquery.type = 'text/javascript'
             document.getElementsByTagName('head')[0].appendChild(jquery)
@@ -42,8 +42,8 @@
 
             function server_GET(noteSubUrl, getAllNotes) {
                 const http = new XMLHttpRequest
-                const url = 'http://localhost:8080'
-                const allNotesUrl = 'http://localhost:8080/allnotes'
+                const url = 'http://glassdragon-nodeserver.dev.platform.obi.solutions/'
+                const allNotesUrl = 'http://glassdragon-nodeserver.dev.platform.obi.solutions/allnotes'
                 var noteUrl = url + "/note/" + arguments[0]
                 if(getAllNotes == false) {
                     http.open('GET', noteUrl)
@@ -61,8 +61,8 @@
             }
             function server_POST() {
                 const http = new XMLHttpRequest
-                const url = 'http://localhost:8080'
-                const allNotesUrl = 'http://localhost:8080/allnotes'
+                const url = 'http://glassdragon-nodeserver.dev.platform.obi.solutions/'
+                const allNotesUrl = 'http://glassdragon-nodeserver.dev.platform.obi.solutions/allnotes'
                 var noteUrl = url + "/note/" + arguments[0]
                 if (getAllNotes == false) {
                     http.open('GET', noteUrl)
